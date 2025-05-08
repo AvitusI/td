@@ -3,8 +3,8 @@
 import Link from "next/link";
 
 type RegistrationSuccessPageProps = {
-    searchParams: Record<string, string>;
-    params: Record<string, string>;
+    searchParams: Promise<Record<string, string>>;
+    params: Promise<Record<string, string>>;
 }
 
 export default async function RegistrationSuccessPage({

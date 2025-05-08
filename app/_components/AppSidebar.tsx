@@ -65,7 +65,7 @@ export function AppSidebar() {
       }
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [router, supabase.auth]);
 
   return (
     <Sidebar>
