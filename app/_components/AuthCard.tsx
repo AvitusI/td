@@ -22,6 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { access } from "fs";
 
 
 const loginSchema = z.object({
@@ -83,28 +84,39 @@ export default function AuthCard() {
   }
 
   const signupSubmit = async (values: z.infer<typeof signupSchema>) => {
+    /*
     await axios.post("/api/register", {
       email: values.email,
       password: values.password
     })
-  }
+    */
 
-  // You'd wire these up to real handlers!
-  /*
-  const handleEmailAuth = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle login or signup...
-    if (tab == "login") {
-      alert("User want to login")
+    const res = await axios.post("/api/register", values);
+
+    const { redirectTo, success } = res.data;
+
+    if (success) {
+      router.push(redirectTo);
     }
     else {
-      alert("User want to signup")
+      // Handle some other error logic
+      router.push(redirectTo);
     }
-  };
-  */
+
+  }
+
 
   const handleGoogleAuth = () => {
-    alert("Google login not implemented.");
+    supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin + "/auth/verify-oauth",
+        queryParams: {
+          access_type: "offline",
+//          prompt: "consent"
+        }
+      }
+    })
   };
 
   return (

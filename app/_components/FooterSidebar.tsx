@@ -14,7 +14,7 @@ import { Logout } from "./Logout"
 export const FooterSidebar = () => {
     return (
         <div className="flex justify-between items-center w-full bg-gray-100 p-4 rounded-md">
-            <span className="text-sm truncate">avitussweetbert213@gmail.com</span>
+            <span className="text-sm truncate">youremail@mail.com</span>
             <span className="rounded-full p-2 hover:bg-gray-300 focus:bg-gray-400">
                 <DropdownMenu>
                     <DropdownMenuTrigger>

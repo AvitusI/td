@@ -5,18 +5,41 @@ import { getSupabaseCookiesUtilClient } from "@/supabase-utils/cookiesUtilClient
 export async function POST(request: NextRequest) {
     const { email, password } = await request.json();
     
-    const supabase = getSupabaseCookiesUtilClient();
+    const supabase = await getSupabaseCookiesUtilClient();
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data: userData, error: userError } = await supabase.auth.signUp({
         email,
         password,
     });
-    if (error) {
-        return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-    if (data.user) {
-        return NextResponse.json({ message: "User created successfully" }, { status: 200 });
+
+    const safeEmailString = encodeURIComponent(email);
+
+    if (userError) {
+        const userExists = userError.message.includes("already been registered");
+        if (userExists) {
+            /*
+            return NextResponse.redirect(
+                new URL("/error?type=register_mail_exists", request.url),
+                302
+            )
+            */
+            return NextResponse.json({
+                success: false,
+                redirectTo: `/error?type=register_mail_exists`
+            }, { status: 400 });
+        } 
+        else {
+            return NextResponse.json({
+                success: false,
+                redirectTo: `/error?type=register_unknown`
+            }, { status: 400 });
+        }
     }
 
-    return Response.json({ email, password });
+    return NextResponse.json({
+        success: true,
+        redirectTo: `/registration-success?email=${encodeURIComponent(safeEmailString)}`
+    }, {
+        status: 200
+    });
 }
