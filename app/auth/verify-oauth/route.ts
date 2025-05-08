@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { getSupabaseCookiesUtilClient } from "@/supabase-utils/cookiesUtilClient";
 import { NextRequest, NextResponse } from "next/server";
 
